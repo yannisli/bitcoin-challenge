@@ -22,7 +22,7 @@ This will start your application and it will be accessible at http://localhost:8
 
 ## Dependencies (Backend)
 
-`body-parser dotenv morgan mysql`
+`body-parser cookie dotenv express morgan mysql`
 
 ## Notes
 To install bitcoinjs-lib and by extension tiny-secp256k1, the prerequisites of Python2.7 and Microsoft Build Tools for C++ are needed.
