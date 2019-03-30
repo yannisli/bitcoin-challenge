@@ -31,17 +31,25 @@ class Main extends Component
         })
         .then( response => { 
             // Then get JSON
-            response.json()
-            .then ( json => {
-                console.log(json);
-                // Dispatch that we received the response and set the data
-                this.props.dispatch({type: "ADDRESS_RESPONSE_RECEIVED", data: json});
-            })
-            .catch ( err => {
-                // On errors, still dispatch an event, but put that there is also an error to display as a modal
+            if(response.ok) {
+                response.json()
+                .then ( json => {
+                    console.log(json);
+                    // Dispatch that we received the response and set the data
+                    this.props.dispatch({type: "ADDRESS_RESPONSE_RECEIVED", data: json});
+                })
+                .catch ( err => {
+                    // On errors, still dispatch an event, but put that there is also an error to display as a modal
+                    this.props.dispatch({type: "ADDRESS_RESPONSE_RECEIVED"});
+                    this.props.dispatch({type: "ERROR_RESPONSE", data: err});
+                });
+            }
+            else
+            {
+                // If response is not okay then it's an error still
                 this.props.dispatch({type: "ADDRESS_RESPONSE_RECEIVED"});
-                this.props.dispatch({type: "ERROR_RESPONSE", data: err});
-            });
+                this.props.dispatch({type: "ERROR_RESPONSE", data: `Blockcypher API returned a ${response.status} status code`})
+            }
 
         })
         .catch( err => {
