@@ -2,11 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { Provider } from 'react-redux';
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+import { createStore, combineReducers } from 'redux';
+
+import defaultReducer from './reducers/default';
+
+// Our combined reducer
+const combinedReducer = combineReducers({
+    defaultReducer
+});
+// Our Redux Store
+const store = createStore(combinedReducer);
+// Render our app, and provide the Redux store to the entire App
+ReactDOM.render((
+    <Provider store={store}>
+        <App />
+    </Provider>),
+document.getElementById('root'));
+

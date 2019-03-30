@@ -1,0 +1,41 @@
+.Main-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 25px;
+    padding: 0 20px;
+    color: lightgray;
+    font-size: calc(10px + 1vmin);
+}
+.Main-body {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+    align-items: center;
+    color: lightgray;
+    font-size: calc(10px + 0.75vmin);
+}
+
+.Main-textarea {
+    resize: none;
+    overflow: hidden;
+    width: 50%;
+    background-color: #282B30;
+    color: lightgray;
+    font-size: calc(10px + 0.75vmin);
+    height: calc(10px + 0.75vmin);
+}
+.Main-button {
+    cursor: pointer;
+    color: gray;
+    transition: color .1s linear;
+    margin-top: 5px;
+    padding: 0px 10px;
+    line-height: 100%;
+    font-size: calc(10px + 0.85vmin);
+}
+
+.Main-button:hover {
+    color: #33AAB3;
+    border-bottom: 1px solid currentColor;
+}
