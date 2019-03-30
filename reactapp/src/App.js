@@ -8,11 +8,16 @@ import { connect } from 'react-redux';
 
 
 import Main from './components/main';
+import ErrorModal from './components/errormodal';
 
 class App extends Component {
   render() {
-    return (
-      <div className="App">
+    let toRender = [];
+    toRender.push(<ErrorModal/>);
+
+    toRender.push(
+    (
+      <div className="App" id="approot">
         <header className="App-header">
           Coding Challenge Project by Yannis Li
           <div className="App-subheader">
@@ -26,8 +31,10 @@ class App extends Component {
         </header>
         <Main/>
       </div>
-    );
+    ));
+    return toRender;
   }
+  
   componentDidMount()
   {
 

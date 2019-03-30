@@ -2,19 +2,27 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Setup
 
-Clone the project and then run in the root folder:
+Clone the project and then run in the root as well as the reactapp folder:
 
 `npm install`
 
 ## Running the project
 
-`npm run start` to run the development version where changes are hot-loaded.
+First navigate to /reactapp and run 
+`npm run build` to build the production build of the React App.
 
-This will start your application and it will be accessible at http://localhost:3000
+Second, navigate to / and run
+`npm run start` to run the Express.js server that will serve the built React App and connect to MySQL
 
-## Additional Dependencies
+This will start your application and it will be accessible at http://localhost:80, or whichever port you have specified in the /.env file
+
+## Additional Dependencies (React App)
 
 `node-fetch bitcoinjs-lib tiny-secp256k1 react react-redux moment`
+
+## Dependencies (Backend)
+
+`body-parser dotenv morgan mysql`
 
 ## Notes
 To install bitcoinjs-lib and by extension tiny-secp256k1, the prerequisites of Python2.7 and Microsoft Build Tools for C++ are needed.
