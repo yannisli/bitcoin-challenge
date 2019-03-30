@@ -4,7 +4,6 @@ import blockcypherLogo from './blockcypher_logo_white.svg';
 import reduxLogo from './redux.svg';
 import './App.css';
 
-import { fetch } from 'node-fetch';
 import { connect } from 'react-redux';
 
 

@@ -8,10 +8,14 @@ import { Provider } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
 
 import defaultReducer from './reducers/default';
+import transactionReducer from './reducers/transactions';
+import paymentReducer from './reducers/payments';
 
 // Our combined reducer
 const combinedReducer = combineReducers({
-    defaultReducer
+    'core': defaultReducer,
+    'transactions': transactionReducer,
+    'payments': paymentReducer
 });
 // Our Redux Store
 const store = createStore(combinedReducer);

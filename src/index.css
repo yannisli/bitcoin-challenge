@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
 body {
   margin: 0;
   padding: 0;
@@ -7,6 +8,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #202225;
+  font-family: 'Roboto';
+  font-weight: 400;
 }
 
 code {
