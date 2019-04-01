@@ -18,7 +18,7 @@ This will start your application and it will be accessible at http://localhost:8
 
 ## Additional Dependencies (React App)
 
-`node-fetch bitcoinjs-lib tiny-secp256k1 react react-redux moment`
+`node-fetch bitcoinjs-lib tiny-secp256k1 react react-redux moment eccrypto`
 
 ## Dependencies (Backend)
 

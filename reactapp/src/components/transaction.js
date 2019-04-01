@@ -12,29 +12,29 @@ class Transaction extends Component {
     render()
     {
         return (
-        <div className="Main-transaction">
-            <div className="Main-row">
+        <div className="transaction-main">
+            <div className="transaction-row">
                 {this.props.TX.confirmed &&
-                    <div>
+                    <div className="transaction-content">
                         {moment(this.props.TX.confirmed).format('YYYY-MM-DD @ h:mm:ss a')}
                     </div>
                 }
                 {this.props.TX.received &&
-                    <div>
+                     <div className="transaction-content">
                         {moment(this.props.TX.received).format('YYYY-MM-DD @ h:mm:ss a')}
                     </div>
                 }
-                <div>
+                <div className="transaction-content">
                     {this.props.TX.tx_hash}
                 </div>
             </div>
             {!this.props.TX.spent &&
-                <div>
+                 <div className="transaction-content">
                     Satoshis Received: {this.props.TX.value}
                 </div>
             }
             {this.props.TX.spent &&
-                <div>
+                 <div className="transaction-content">
                     Satoshis Sent: {this.props.TX.value}
                 </div>
             }

@@ -1,0 +1,59 @@
+.navbar-root {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    background: #202225;
+    width: 100%;
+    
+   
+}
+
+.navbar-container {
+    margin-right: 8px;
+    line-height: calc(10px + 4vmin);
+    font-size: calc(10px + 0.75vmin);
+}
+
+.navbar-button {
+    cursor: pointer;
+    color: lightgray;
+    transition: color .1s linear;
+    height: calc(10px + 4vmin);
+    width: 184px;
+}
+
+.navbar-button:hover {
+    color: #33AAB3;
+    border-bottom: 1px solid currentColor;
+    height: calc(9px + 4vmin);
+}
+
+.navbar-dropdown {
+    position: absolute;
+    background-color: #101010;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    border-radius: 5px;
+    width: 184px;
+    color: lightgray;
+    padding-bottom: 2px;
+}
+
+.navbar-drop-button {
+    width: calc(100% - 4px);
+    background-color: #7289DA;
+    color: white;
+    border-radius: 2px;
+    transition: background-color .1s linear;
+    cursor: pointer;
+    line-height: calc(10px + 2vmin);
+    font-size: calc(10px + 0.5vmin);
+    margin-top: 2px;
+}
+
+.navbar-drop-button:hover {
+    background-color: #697ec4;
+}

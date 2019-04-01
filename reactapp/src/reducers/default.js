@@ -4,24 +4,26 @@
  */
 
 const initialState = {
-    transactions: [], // Array of Transaction objects
+    /*transactions: [], // Array of Transaction objects
     addressObject: null, // Data of current address
     loadedTransactions: false, // Have we loaded transactions?
-    fetchingTransactions: false, // Are we fetching new transactions/balance
+    fetchingTransactions: false, // Are we fetching new transactions/balance*/
     displayingError: false, // Are we displaying an error
     errorData: null, // Error data
-
+    displayNavDrop: false,
 };
 
 // Reducer function
 const defaultReducer = (state = initialState, action) => {
-    console.log("Reduce", state, action);
     // Assign to new object as Redux is immutable
     // If not assigned and we modify/mutate, the === will still be true from old to new after the reducer action, not triggering a re-render
     let newState = Object.assign({}, state);
     // Switch based on action type
     switch (action.type)
     {
+        case "TOGGLE_NAV_DROP":
+            newState.displayNavDrop = !newState.displayNavDrop;
+            return newState;
         case "BACK_HOME":
             newState = initialState;
             return newState;
@@ -29,7 +31,8 @@ const defaultReducer = (state = initialState, action) => {
             newState.displayingError = false;
             newState.errorData = null;
             return newState;
-        case "ADDRESS_FETCH_SENT": // When users press fetch
+        // Old
+        /*case "ADDRESS_FETCH_SENT": // When users press fetch
             newState.fetchingTransactions = true;
             return newState;
         case "ADDRESS_RESPONSE_RECEIVED": // When we receive a response, either ok or error
@@ -38,7 +41,7 @@ const defaultReducer = (state = initialState, action) => {
                 newState.addressObject = action.data;
             newState.fetchingTransactions = false;
             newState.loadedTransactions = true;
-            return newState;
+            return newState;*/
         case "ERROR_RESPONSE": // When we receive a response and there was an error, to make it so error modal will display
             newState.displayingError = true;
             newState.errorData = action.data;

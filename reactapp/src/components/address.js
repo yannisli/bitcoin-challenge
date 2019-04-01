@@ -6,9 +6,9 @@ import './styles/main.css';
 
 import fetch from 'node-fetch';
 
-import Transactions from '../components/transactions';
+import Transactions from './transactions';
 
-class Main extends Component
+class Address extends Component
 {
     constructor(props)
     {
@@ -163,4 +163,4 @@ export default connect( state => {
         LoadedTransactions: state.core.loadedTransactions,
         AddressData: state.core.addressObject
     };
-})(Main);
+})(Address);

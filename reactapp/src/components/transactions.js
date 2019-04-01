@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import Transaction from './transaction';
 
+import './styles/transaction.css';
+
 class Transactions extends Component {
 
     constructor(props)
@@ -23,6 +25,8 @@ class Transactions extends Component {
     }
     render()
     {
+        if(!this.props.AddressData)
+            return <div></div>
         let pendingTransactions = [];
         let confirmedTransactions = [];
         if(this.props.DisplayPendings)
@@ -37,7 +41,7 @@ class Transactions extends Component {
             }
             else
             {
-                pendingTransactions = <div className="Main-transaction">
+                pendingTransactions = <div className="transaction-main">
                     There are no pending transactions!
                 </div>
             }
@@ -54,16 +58,16 @@ class Transactions extends Component {
             }
             else
             {
-                confirmedTransactions = <div className="Main-transaction">
+                confirmedTransactions = <div className="transaction-main">
                     There are no confirmed transactions!
                 </div>
             }
         }
         return (
-        <div className="Main-transaction-body">
-            <header className="Main-subheader">
+        <div className="transaction-body">
+            <header className="transaction-subheader">
                 <div>
-                    <span style={{display: 'inline-block', width: '20px', padding: '0px'}} className="Main-button" onClick={this.togglePending}>
+                    <span style={{display: 'inline-block', width: '20px', padding: '0px'}} className="transaction-button" onClick={this.togglePending}>
                         {this.props.DisplayPendings ? "-" : "+"}
                     </span>
                     <span>
@@ -72,9 +76,9 @@ class Transactions extends Component {
                 </div>
             </header>
             {pendingTransactions}
-            <header className="Main-subheader">
+            <header className="transaction-subheader">
                 <div>
-                    <span style={{display: 'inline-block', width: '20px', padding: '0px'}} className="Main-button" onClick={this.toggleConfirm}>
+                    <span style={{display: 'inline-block', width: '20px', padding: '0px'}} className="transaction-button" onClick={this.toggleConfirm}>
                         {this.props.DisplayConfirms ? "-" : "+"}
                     </span>
                     <span>
@@ -90,7 +94,6 @@ class Transactions extends Component {
 
 export default connect(state => {
     return {
-        AddressData: state.core.addressObject,
         DisplayPendings: state.transactions.displayPendings,
         DisplayConfirms: state.transactions.displayConfirms,
     }

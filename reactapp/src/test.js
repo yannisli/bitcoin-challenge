@@ -1,4 +1,5 @@
 const bitcoin = require("bitcoinjs-lib");
+const bip32 = require("bip32");
 
 const TESTNET = bitcoin.networks.testnet;
 
@@ -13,3 +14,5 @@ console.log("Addr:", addr);
 console.log("Address: ", addr.address);
 
 console.log("Private Key:",  kp.privateKey.toString('hex'));
+
+console.log("Private Key WIF", kp.toWIF());

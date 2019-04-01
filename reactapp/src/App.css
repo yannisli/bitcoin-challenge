@@ -1,35 +1,10 @@
 .App {
   text-align: center;
+  height: 100%;
+  
 }
 
-.App-logo {
-  height: 5vmin;
-  pointer-events: none;
-  padding: 0px 5px;
-}
 
-.App-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: lightgray;
-}
-.App-utilizing {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-.App-subheader {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 1vmin);
-  color: lightgray;
-}
 .App-link {
   color: #61dafb;
 }

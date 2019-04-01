@@ -1,0 +1,117 @@
+
+
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    height: 100%;
+    margin: auto;
+}
+.login-body {
+    background-color: #202225;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 354px;
+    border-radius: 5px;
+    padding: 10px 15px;
+    color: lightgray;
+    font-weight: 300;
+    font-size: calc(10px + 0.5vmin);
+    text-align: left;
+}
+.login-body-head {
+    text-align: center;
+    font-size: calc(10px + 2vmin);
+    width: 100%;
+}
+.login-field {
+    color: gray;
+    font-size: calc(10px + 0.4vmin); 
+    font-weight: 400;
+}
+.login-textarea {
+    color: white;
+    font-size: calc(10px + 0.4vmin);
+    font-weight: 300;
+    overflow: hidden;
+    resize: none;
+    background-color: #282B30;
+    border: 1px solid #101010;
+    border-radius: 3px;
+    height: calc(10px + 1vmin);
+    line-height: calc(10px + 1vmin);
+}
+.login-logo {
+    height: 5vmin;
+    pointer-events: none;
+    padding: 0px 5px;
+}
+
+.login-loading {
+    height: 7vmin;
+}
+  
+.login-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: lightgray;
+    text-align: center;
+}
+.login-utilizing {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.login-subheader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 1vmin);
+    color: lightgray;
+}
+
+.login-button {
+    background-color: #7289DA;
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+    font-weight: 400;
+    margin-top: calc(10px + 0.4vmin);
+    font-size: calc(10px + 1vmin);
+    line-height: calc(10px + 3vmin);
+    cursor: pointer;
+    transition: background-color .1s linear;
+}
+
+.login-button:hover {
+    background-color: #677BC4;
+}
+
+.login-text-button {
+    margin-top: 5px;
+    transition: color .1s linear;
+    cursor: pointer;
+    color: #7289DA;
+    text-align: center;
+    font-size: calc(10px + 0.5vmin);
+    padding: 0px 4px;
+    width: fit-content;
+    align-self: center;
+}
+
+.login-text-button:hover {
+    color: #33AAB3;
+    border-bottom: 1px solid currentColor;
+}
+
+.login-error {
+    color: #F04747;
+    text-align: center;
+}
