@@ -16,6 +16,8 @@ Second, navigate to / and run
 
 This will start your application and it will be accessible at http://localhost:80, or whichever port you have specified in the /.env file
 
+If you are running on a UNIX based machine, you will need to run npm run start with elevated permissions (sudo) so that the Express.js application can listen on port 80.
+
 ## Running the project (Development Mode)
 
 First navigate to / and run
@@ -23,6 +25,9 @@ First navigate to / and run
 
 Second, navigate to /reactapp and run
 `npm run start` to run the development mode of the React App which will proxy requests to http://localhost:80, and serve the react app at http://localhost:3000 which has the added ability to display code changes during runtime
+
+
+If you are running on a UNIX based machine, you will need to run npm run start with elevated permissions (sudo) so that the Express.js application can listen on port 80.
 
 ## Dependencies (React App)
 
