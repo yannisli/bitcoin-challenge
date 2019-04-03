@@ -55,3 +55,9 @@ To send a payment via this application, you will need to register a new account 
 After you have registered the account and address, you can navigate to that addresses' page by selecting it from the list in /dashboard and there should be the ability to send the payment.
 
 WIFs are not exclusive to accounts, multiple accounts can have the same WIF registered to them.
+
+The application is setup as a Home page (Login) -> Dashboard (lists registered WIFs to the account as well as option to display an individual public address with no option to send a payment) -> Wallet (displays more detailed information on the registered WIF such as transaction history. Gives you the option to pay as the WIF contains the private key necessary to sign transactions)
+
+## Development Environment
+
+Visual Studio Code, Windows 10 Professional x64 with Node v11.10.1
