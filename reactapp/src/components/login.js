@@ -216,7 +216,6 @@ class Login extends Component {
                         <div className="login-body-head">
                             {this.props.Creating ? "Create a new account" : "Welcome!"}
                         </div>
-
                         <div className="login-field">
                             USERNAME
                         </div>

@@ -1,166 +1,141 @@
-
-import { connect } from 'react-redux';
 import React, { Component } from 'react';
 
-import './styles/main.css';
+import { connect } from 'react-redux';
 
-import fetch from 'node-fetch';
+import { Redirect, Link } from 'react-router-dom';
+
+import loading from '../loading.svg';
+
+import NavBar from './navbar';
 
 import Transactions from './transactions';
 
-class Address extends Component
-{
+import './styles/address.css';
+class Address extends Component {
     constructor(props)
     {
         super(props);
-        // Bind functions so that `this` is properly defined and `this.props` is accessible
         this.dispatchFetchRequest = this.dispatchFetchRequest.bind(this);
     }
     dispatchFetchRequest()
     {
-        let address = document.getElementById("fetchtextarea").value;
-
         this.props.dispatch({type: "ADDRESS_FETCH_SENT"});
-        // Make a node-fetch request to the Blockcypher Address API, the value is the value of the text-area with the ID 'fetchtextarea'
-        fetch(`https://api.blockcypher.com/v1/btc/test3/addrs/${address}`,
+        let address = document.getElementById("fetchtextarea").value;
+        fetch(`https://api.blockcypher.com/v1/btc/test3/addrs/${address}/full`,
         {
-            method: 'GET',
+            method: "GET",
             headers: {
                 'Accept': 'application/json'
             }
-        })
-        .then( response => { 
-            // Then get JSON
-            if(response.ok) {
-                response.json()
-                .then ( json => {
-                    console.log(json);
-                    // Dispatch that we received the response and set the data
-                    this.props.dispatch({type: "ADDRESS_RESPONSE_RECEIVED", data: json});
-                })
-                .catch ( err => {
-                    // On errors, still dispatch an event, but put that there is also an error to display as a modal
-                    this.props.dispatch({type: "ADDRESS_RESPONSE_RECEIVED"});
-                    this.props.dispatch({type: "ERROR_RESPONSE", data: err});
-                });
+        }).then( res => {
+            if(!res.ok)
+            {
+                res.json().then(json => {console.log(json);this.props.dispatch({type: "ERROR_RESPONSE", data: `Received response code ${res.status} from server\n${json.error}`})}).catch(err => console.log(err));
+                this.props.dispatch({type: "ADDRESS_RESET"});
             }
             else
             {
-                // If response is not okay then it's an error still
-                this.props.dispatch({type: "ADDRESS_RESPONSE_RECEIVED"});
-                this.props.dispatch({type: "ERROR_RESPONSE", data: `Blockcypher API returned a ${response.status} status code`})
+                res.json().then(json => {
+                    this.props.dispatch({type: "ADDRESS_RESPONSE_RECEIVED", data: json});
+                }).catch(err => console.log(err));
             }
-
-        })
-        .catch( err => {
-            this.props.dispatch({type: "ADDRESS_RESPONSE_RECEIVED"});
-            this.props.dispatch({type: "ERROR_RESPONSE", data: err});
+        }).catch(err => {
+            console.log(err);
+            this.props.dispatch({type: "ERROR_RESPONSE", data: `GET request to Blockcypher API failed`});
+            this.props.dispatch({type: "ADDRESS_RESET"});
         });
     }
     render()
     {
-        // If we have data already loaded
-        console.log(this.props.LoadedTransactions);
-        if(!this.props.LoadedTransactions || !this.props.AddressData)
+        if(!this.props.UserData)
+            return <Redirect to="/"/>
+        let toRender;
+        if(!this.props.Loaded)
         {
-            if(!this.props.LoadingTransactions)
-                return (
-                <div>
-                    <header className="Main-header">
-                        Welcome!
-                    </header>
-                    <div className="Main-body" style={{alignItems: 'center'}}>
-                        Please enter the Public Address you would like to see the balance and transaction history of
-                        <textarea id="fetchtextarea" className="Main-textarea" placeholder="ex. moXuzZgy2R7jG6yZeDv8P7ajUZu4wN2Fkn"/>
-                        <div className="Main-button" onClick={this.dispatchFetchRequest}>Fetch</div>
-                    </div>
-                </div>);
+            if(this.props.Loading)
+            {
+                toRender = <div className="address-content"><header className="login-header">
+                    Fetching address data...
+                    <img src={loading} alt="Loading..." className="login-loading"/>
+                </header>
+                </div>
+            }
             else
-                return (
-                    <div>
-                        <header className="Main-header">
-                            Fetching Data from Blockcypher...
-                        </header>
-                    </div>
-                );
+            {
+                toRender = <div className="address-form">
+                    Please enter the address you would like to see the balance and transaction history of
+                    <textarea id="fetchtextarea" className="address-textarea" placeholder="ex. mxG1GPC5Ro3ha6ijugkQJ4oUkMANj7LxY2"/>
+                    <div className="address-button" onClick={this.dispatchFetchRequest}>Fetch</div>
+                    <Link to="/dashboard" style={{width: '100%', textDecoration: 'none'}}><div className="address-cancel">Back to Dashboard</div></Link>
+                    {this.props.Error &&
+                        <div className="address-error">
+                            {this.props.Error}
+                        </div>
+                    }
+                </div>
+            }
         }
         else
         {
-            return (
-                <div>
-                    <header className="Main-header">
-                        Displaying `{this.props.AddressData.address}`<br/>
-                        <hr className="Main-hr"/>
-                    </header>
-                    
-                    <div className="Main-body" style={{flexDirection: 'row'}}>
-                        <div style={{width: '100%'}} className="Main-row">
-                            <div className="Disc-button">Send Payment</div>
-                            <div className="Disc-button-cancel" onClick={() => this.props.dispatch({type: "BACK_HOME"})}>Go Back</div>
-                        </div>
-                        <header className="Main-subheader">
+            toRender = <div className="address-content">
+                <Link to="/dashboard" style={{width: '100%', textDecoration: 'none'}}><div className="address-cancel" style={{marginTop: '0'}}>Back to Dashboard</div></Link>
+                <header className="address-header">
+                    Public Key
+                    <div className="address-subheader">
+                        {this.props.Data.address}
+                    </div>
+                </header>
+                <div className="wallet-row">
+                    <div className="wallet-row-body">
+                        <div className="wallet-row-header">
                             Balance (sat)
-                            <div className="Main-sub-body">
-                                <div>
-                                    Current: {this.props.AddressData.balance}
-                                </div>
-                                <div>
-                                    Pending: {this.props.AddressData.unconfirmed_balance}
-                                </div>
-                                <div>
-                                    Total: {this.props.AddressData.final_balance}
-                                </div>
-                            </div>
-                        </header>
-
-                        <header className="Main-subheader">
+                        </div>
+                        <div className="wallet-row-content">
+                            Current: {this.props.Data.balance}
+                        </div>
+                        <div className="wallet-row-content">
+                            Unconfirmed: {this.props.Data.unconfirmed_balance}
+                        </div>
+                        <div className="wallet-row-content">
+                            Total: {this.props.Data.final_balance}
+                        </div>
+                    </div>
+                    <div className="wallet-row-body">
+                        <div className="wallet-row-header">
                             Transactions
-                            <div className="Main-sub-body">
-                                <div>
-                                    Confirmed: {this.props.AddressData.n_tx}
-                                </div>
-                                <div>
-                                    Pending: {this.props.AddressData.unconfirmed_n_tx}
-                                </div>
-                                <div>
-                                    Total: {this.props.AddressData.final_n_tx}
-                                </div>
-                            </div>
-                        </header>
-
-                        <header className="Main-subheader">
-                            In/Out Flow (sat)
-                            <div className="Main-sub-body">
-                                <div>
-                                    Received: {this.props.AddressData.total_received}
-                                </div>
-                                <div>
-                                    Sent: {this.props.AddressData.total_sent}
-                                </div>
-                            </div>
-                        </header>
-                        <header className="Main-header" style={{width: '100%'}}>
-                            Transaction History
-                        </header>
-                        <Transactions/>
+                        </div>
+                        <div className="wallet-row-content">
+                            Confirmed: {this.props.Data.n_tx}
+                        </div>
+                        <div className="wallet-row-content">
+                            Pending: {this.props.Data.unconfirmed_n_tx}
+                        </div>
+                        <div className="wallet-row-content">
+                            Total: {this.props.Data.final_n_tx}
+                        </div>
                     </div>
                 </div>
-                
-            )
+                <Transactions Address={this.props.Data.address} AddressData={this.props.Data}/>
+            </div>
         }
+        return <div className="address-body">
+            <NavBar/>
+            {toRender}
+        </div>
     }
     componentDidMount()
     {
-        console.log("Did Mount");
-        console.log(this.props);
+        this.props.dispatch({type: "ADDRESS_RESET"});
     }
 }
 
-export default connect( state => {
+export default connect(state => {
     return {
-        Transactions: state.core.transactions,
-        LoadingTransactions: state.core.fetchingTransactions,
-        LoadedTransactions: state.core.loadedTransactions,
-        AddressData: state.core.addressObject
-    };
+        UserData: state.login.accountData,
+        Loading: state.core.fetchingAddress,
+        Loaded: state.core.fetchedAddress,
+        Data: state.core.publicAddressData,
+        Error: state.core.fetchError
+    }
+
 })(Address);

@@ -9,7 +9,8 @@
 
 .dashboard-address {
     display: flex;
-    width: 384px;
+    width: calc(100% - 2px);
+    max-width: 768px;
     margin-left: auto;
     margin-right: auto;
     flex-wrap: nowrap;
@@ -54,13 +55,16 @@
     align-items: center;
     font-size: calc(10px + 0.5vmin);
     flex-shrink: 1;
+    width: 100%;
+    max-width: 768px;
 }
 
 .dashboard-creating-modal {
     position: absolute;
 
-    width: 382px;
-    height: calc((10px + 1vmin) * 12);
+    width: 100%;
+    max-width: 382px;
+    height: calc((10px + 1vmax) * 14);
 
     margin: auto;
     top: 0;
@@ -122,7 +126,7 @@
     line-height: calc(10px + 1.5vmin);
     color: white;
     margin: 10px 0px;
-    width: 384px;
+    width: 100%;
     border-bottom: 2px solid #697ec4;
 }
 .dashboard-cancel-button {
@@ -151,5 +155,5 @@
     color: lightgray;
     line-height: calc(10px + 0.4vmin);
     font-size: calc(10px + 0.4vmin);
-    height: calc(10px + 1.6vmin);
+    height: calc(10px + 6vmin);
 }

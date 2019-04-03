@@ -9,8 +9,6 @@ class NavBar extends Component {
     {
         super(props);
         this.toggleNav = this.toggleNav.bind(this);
-        this.togglePasswordChange = this.togglePasswordChange.bind(this);
-        this.dispatchDeleteRequest = this.dispatchDeleteRequest.bind(this);
         this.dispatchLogoutRequest = this.dispatchLogoutRequest.bind(this);
     }
 
@@ -28,15 +26,7 @@ class NavBar extends Component {
         }).catch(err => console.log(err));
     }
 
-    dispatchDeleteRequest()
-    {
 
-    }
-
-    togglePasswordChange()
-    {
-
-    }
     render()
     {
         return <div className="navbar-root">
@@ -47,12 +37,6 @@ class NavBar extends Component {
                 </div>
                 {this.props.Display &&
                     <div className="navbar-dropdown">
-                        <div className="navbar-drop-button" onClick={this.togglePasswordChange}>
-                            Change Password
-                        </div>
-                        <div className="navbar-drop-button" onClick={this.dispatchDeleteRequest}>
-                            Delete Account
-                        </div>
                         <div className="navbar-drop-button" onClick={this.dispatchLogoutRequest}>
                             Logout
                         </div>
@@ -61,6 +45,11 @@ class NavBar extends Component {
             </div>
             
         </div>
+    }
+
+    componentDidMount()
+    {
+        this.props.dispatch({type: "NAVDROP_HIDE"});
     }
 }
 

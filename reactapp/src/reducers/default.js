@@ -4,13 +4,14 @@
  */
 
 const initialState = {
-    /*transactions: [], // Array of Transaction objects
-    addressObject: null, // Data of current address
-    loadedTransactions: false, // Have we loaded transactions?
-    fetchingTransactions: false, // Are we fetching new transactions/balance*/
     displayingError: false, // Are we displaying an error
     errorData: null, // Error data
-    displayNavDrop: false,
+    displayNavDrop: false, // Display the navbar dropdown
+    awaitingServerResponse: false, // Are we awaiting a server response. Typically used after actions that had a modal beforehand
+    fetchingAddress: false, // Are we fetching public address data
+    fetchedAddress: false, // Did we finish
+    publicAddressData: null, // The data
+    fetchError: null, // Error for /Address
 };
 
 // Reducer function
@@ -21,6 +22,15 @@ const defaultReducer = (state = initialState, action) => {
     // Switch based on action type
     switch (action.type)
     {
+        case "NAVDROP_HIDE":
+            newState.displayNavDrop = false;
+            return newState;
+        case "SERVER_RESPONSE_RECEIVED":
+            newState.awaitingServerResponse = false;
+            return newState;
+        case "AWAITING_SERVER_RESPONSE":
+            newState.awaitingServerResponse = true;
+            return newState;
         case "TOGGLE_NAV_DROP":
             newState.displayNavDrop = !newState.displayNavDrop;
             return newState;
@@ -31,20 +41,29 @@ const defaultReducer = (state = initialState, action) => {
             newState.displayingError = false;
             newState.errorData = null;
             return newState;
-        // Old
-        /*case "ADDRESS_FETCH_SENT": // When users press fetch
-            newState.fetchingTransactions = true;
+        case "ADDRESS_RESET":
+            newState.fetchingAddress = false;
+            newState.fetchedAddress = false;
+            newState.publicAddressData = null;
+            newState.fetchError = null;
+            return newState;
+        case "ADDRESS_ERROR":
+            newState.fetchError = action.data;
+            return newState;
+        case "ADDRESS_FETCH_SENT": // When users press fetch
+            newState.fetchingAddress = true;
             return newState;
         case "ADDRESS_RESPONSE_RECEIVED": // When we receive a response, either ok or error
             // Empty action.data when there's an error
             if(action.data !== undefined)
-                newState.addressObject = action.data;
-            newState.fetchingTransactions = false;
-            newState.loadedTransactions = true;
-            return newState;*/
+                newState.publicAddressData = action.data;
+            newState.fetchingAddress = false;
+            newState.fetchedAddress = true;
+            return newState;
         case "ERROR_RESPONSE": // When we receive a response and there was an error, to make it so error modal will display
             newState.displayingError = true;
             newState.errorData = action.data;
+            newState.awaitingServerResponse = false;
             return newState;
         default: // Default, just return the old state
             return newState;

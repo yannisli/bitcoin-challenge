@@ -11,6 +11,8 @@ import Login from './components/login';
 import ErrorModal from './components/errormodal';
 import Dashboard from './components/dashboard';
 import Wallet from './components/wallet';
+import AwaitingModal from './components/awaiting';
+import Address from './components/address';
 
 class App extends Component {
   render() {
@@ -24,6 +26,7 @@ class App extends Component {
           <Route exact path="/" component={Login}/>
           <Route path="/dashboard" component={Dashboard}/>
           <Route path="/wallet/:walletId" component={Wallet}/>
+          <Route path="/address" component={Address}/>
           <Redirect from="*" to="/"/> {/* Default path should be the home*/}
           
         </Switch>
@@ -31,6 +34,7 @@ class App extends Component {
       </div>
     ));
     toRender.push(<ErrorModal key="error"/>);
+    toRender.push(<AwaitingModal key="awaiting"/>);
     return toRender;
   }
   

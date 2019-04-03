@@ -11,6 +11,15 @@ const walletReducer = (state = initialState, action) => {
     let newState = Object.assign({}, state);
 
     switch(action.type) {
+        case "WALLET_NEW_TX":
+            let newData = Object.assign({}, newState.data);
+
+            newData.txs.push(action.data);
+            newState.data = newData;
+            // We can also assume that the new tx is from the request so hide that
+            newState.display = false;
+            newState.error = null;
+            return newState;
         case "WALLET_ERROR":
             newState.error = action.data;
             return newState;
@@ -34,8 +43,8 @@ const walletReducer = (state = initialState, action) => {
         case "WALLET_FETCHED_DATA":
             newState.loaded = true;
             newState.loading = false;
-            newState.data = action.data;
-            
+            newState.data = Object.assign({}, action.data);
+            return newState;
         default:
             return newState;
     }

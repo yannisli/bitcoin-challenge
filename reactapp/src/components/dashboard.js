@@ -57,6 +57,7 @@ class Dashboard extends Component {
     }
     dispatchCreateRequest()
     {
+        // TODO: Set state to awaiting server response so that the global 'awaiting' modal will show up
         // Validate first
         let address = document.getElementById("dashadd").value;
         let nick = document.getElementById("dashnick").value;
@@ -72,6 +73,7 @@ class Dashboard extends Component {
             this.props.dispatch({type: "DASHBOARD_CREATE_ERROR", data: 'Nickname must be within 20 characters'});
             return;
         }
+        this.props.dispatch({type: "AWAITING_SERVER_RESPONSE"});
         // Make API request
         fetch(`/api/account/${this.props.UserData.user_id}/wif`, {
             method: 'POST',
@@ -94,12 +96,14 @@ class Dashboard extends Component {
             {
                 res.json().then(json => {
                     console.log(json);
+                    this.props.dispatch({type: "SERVER_RESPONSE_RECEIVED"});
                     this.props.dispatch({type: "DASHBOARD_CREATE_FINISHED", data: json});
                 }).catch(err => console.log(err));
             }
         }).catch(err => {
             console.log(err);
-            this.props.dispatch({type: "DASHBOARD_CREATE_FINISHED"})
+            this.props.dispatch({type: "DASHBOARD_CREATE_FINISHED"});
+            this.props.dispatch({type: "ERROR_RESPONSE", data: `POST request to internal server has failed`});
         })
     }
     render()
@@ -136,8 +140,10 @@ class Dashboard extends Component {
                     </div>)
                 }
 
-                addrs.push(<div key="addrlogin" className="login-button" style={{width: '384px'}} onClick={this.showCreation}>
+                addrs.push(<div key="addrlogin" className="login-button" style={{width: '100%'}} onClick={this.showCreation}>
                 Add new Address</div>);
+
+                addrs.push(<Link key="addrlink" style={{textDecoration: 'none', width: '100%'}} to="/address"><div key="address" className="login-button" style={{width: '100%'}}>Get public address details</div></Link>);
                 
             }
         }

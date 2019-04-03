@@ -7,9 +7,16 @@ html, body {
   background-color: #282B30;
   font-family: 'Roboto';
   font-weight: 400;
+
+
   height: 100%;
 }
 
+@media screen and (max-width: 768px) {
+  html, body {
+    height: fit-content;
+  }
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

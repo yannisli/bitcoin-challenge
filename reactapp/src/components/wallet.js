@@ -26,10 +26,16 @@ class Wallet extends Component
         this.hideSendingModal = this.hideSendingModal.bind(this);
         this.trySendPayment = this.trySendPayment.bind(this);
     }
-    trySendPayment()
+    /**
+     * Try to send payment. Parameters optional and intended for calls that do not have the send dialog shown to pull values from.
+     * @param {number} amt Optional parameter. Will prevent reading the textarea for value. For calls that might not have the textarea shown
+     * @param {string} toWho Optioanl parameter. Will prevent reading the textarea for value.
+     */
+    trySendPayment(amt, toWho)
     {
+        // TODO: Implement loading screen/awaiting
         // Validate
-        let amount = document.getElementById("walletamount").value;
+        let amount = typeof(amt) === "number" ? amt : document.getElementById("walletamount").value;
         if(typeof(amount) === "string")
             amount = parseInt(amount, 10);
         if(amount <= 0)
@@ -37,7 +43,7 @@ class Wallet extends Component
             this.props.dispatch({type: "WALLET_ERROR", data: "Must provide valid amount"});
             return;
         }
-        let to = document.getElementById("walletto").value;
+        let to = toWho ? toWho : document.getElementById("walletto").value;
         if(to.length === 0)
         {
             this.props.dispatch({type: "WALLET_ERROR", data: "Must provide valid address"});
@@ -54,14 +60,10 @@ class Wallet extends Component
             inputs: [{addresses: [this.props.ECPair.Address]}],
             outputs: [{addresses: [to], value: amount}]
         };
-
+        this.props.dispatch({type: "AWAITING_SERVER_RESPONSE"});
         // POST now
         fetch('https://api.blockcypher.com/v1/btc/test3/txs/new', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
             body: JSON.stringify(newtx)
         }).then(res => {
 
@@ -69,56 +71,79 @@ class Wallet extends Component
             {
                 console.log("Response was not okay");
                 console.log(res);
-                res.text().then(body => this.props.dispatch({type: "ERROR_RESPONSE", data: `Received server response code ${res.status}\n${body}`})).catch(err => console.log(err));
+                res.json().then(body => {this.props.dispatch({type: "ERROR_RESPONSE", data: `Received server response code ${res.status}\n${body.errors[0].error}`})}).catch(err => console.log(err));
                 
             }
             else
             {
                 res.json().then(json => {
                     console.log("JSON done", json);
+                    // From Blockcypher API reference
                     let tmptx = Object.assign({}, json);
-
+                    // Pubkeys and Signatures must be the same index.
                     tmptx.pubkeys = [];
                     tmptx.signatures = [];
+                    // Keep count of how much we have iterated through, as eccrypto.sign is an asynchronous function
                     let counter = 0;
+                    // Loop through what we have to sign
+                    let handler = sig => {
+                        console.log("Signature:", sig.toString('hex'));
+                        // Push the signature as well
+                        tmptx.signatures.push(sig.toString('hex'));
+                        
+                        // Increment our counter
+                        counter++;
+                        // When counter reaches the length of what we had to sign, then we've finished and we should POST to the API to send
+                        if(counter === tmptx.tosign.length)
+                        {
+                            // POST request to send
+                            fetch('https://api.blockcypher.com/v1/btc/test3/txs/send', {
+                                method: 'POST',
+                                body: JSON.stringify(tmptx)
+                            }).then(res2 => {
+                                if(res2.ok)
+                                {
+                                    // Done. It should come back with a finished TX for us to push into our Store instead of fetching again
+
+                                    // JSON result is a {tosign: [empty array], tx: {...}}
+                                    // We just want to push the tx since tosign is useless to us
+                                    res2.json().then(json2 => {
+
+                                        this.props.dispatch({type: "SERVER_RESPONSE_RECEIVED"});
+                                        // Push the new TX to the store for data
+                                        this.props.dispatch({type: "WALLET_NEW_TX", data: json2.tx});
+
+
+                                    }).catch(err => console.log(err));
+                                    
+                                    // Set a timeout because there's rate limit..
+                                    //setTimeout(() => 
+                                    //this.fetchAddressData(), 5000);
+                                }
+                                else
+                                {
+                                    console.log("Not ok...");
+                                    console.log(res2);
+                                    // Errors come back as JSON as {"Errors": [{Error:}]}
+                                    res2.json().then(body => this.props.dispatch({type: "ERROR_RESPONSE", data: `Received server response code ${res2.status}\n${body.errors[0].error}`})).catch(err => console.log(err));
+                                }
+                            }).catch(err => {
+                                console.log("Reached error", err);
+                                console.log(err);
+                                this.props.dispatch({type: "ERROR_RESPONSE", data: `Failed to send POST request to Blockcypher`});
+                            })
+                        }
+                    }
                     for(let n in tmptx.tosign) 
                     {
                         let tosign = tmptx.tosign[n];
+                        // Push public key
                         tmptx.pubkeys.push(this.props.ECPair.KP.publicKey.toString("hex"));
                         let buf = Buffer.from(tosign, "hex");
 
-                        let msg = crypto.createHash("sha256").update(buf).digest();
-                        eccrypto.sign(this.props.ECPair.KP.privateKey, buf).then(sig => {
-                            console.log("Sig in DER:", sig.toString('hex'));
-                            tmptx.signatures[n] = sig.toString('hex');
-                            eccrypto.verify(this.props.ECPair.KP.publicKey, buf, sig).then(() => console.log("OK")).catch(() => console.log("nope"));
-                            counter++;
-                            if(counter === tmptx.tosign.length)
-                            {
-                                // Then send fetch??
-                                console.log("Can fetch now");
-                                // Another request
-                                fetch('https://api.blockcypher.com/v1/btc/test3/txs/send', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify(tmptx)
-                                }).then(res => {
-                                    if(res.ok)
-                                    {
-                                        console.log("Ok?!!!");
-                                        this.fetchAddressData();
-                                    }
-                                    else
-                                    {
-                                        console.log("Not ok...");
-                                        console.log(res);
-                                        this.props.dispatch({type: "ERROR_RESPONSE", data: `Received server response code ${res.status}`});
-                                    }
-                                }).catch(err => console.log(err));
-                            }
-                        });
+                        crypto.createHash("sha256").update(buf).digest();
+                        // Sign using our private key
+                        eccrypto.sign(this.props.ECPair.KP.privateKey, buf).then(handler).catch(err => console.log(err));
                     }
                     
 
@@ -130,7 +155,7 @@ class Wallet extends Component
 
         }).catch(err => {
             console.log(err);
-            this.props.dispatch({type: "ERROR_RESPONSE", data: err});
+            this.props.dispatch({type: "ERROR_RESPONSE", data: `POST request to Blockcypher has failed`});
         })
     }
     showSendingModal()
@@ -173,7 +198,7 @@ class Wallet extends Component
             }
         }).catch(err => {
             console.log(err);
-            this.props.dispatch({type: "ERROR_RESPONSE", data: err});
+            this.props.dispatch({type: "ERROR_RESPONSE", data: `GET request to Blockcypher for Address data failed`});
             this.props.dispatch({type: "WALLET_FETCHED_DATA"});
         })
     }
@@ -203,7 +228,7 @@ class Wallet extends Component
         toRender.push(<div key="walletroot" id="walletroot" className="wallet-root">
             <NavBar/>
             <div className="wallet-container">
-                <div className="wallet-row">
+                <div className="wallet-row" style={{flexDirection: 'row'}}>
                     <Link to="/dashboard" style={{width: '45%', alignSelf: 'flex-start', textDecoration: 'none'}}>
                         <div className="error-button" style={{'padding': '5px'}}>
                             Back to Dashboard
@@ -279,7 +304,7 @@ class Wallet extends Component
                 </div>*/}
                     </div>
                 }
-                {!this.props.Loading && this.props.Loaded && <Transactions AddressData={this.props.Data}/>}
+                {!this.props.Loading && this.props.Loaded && <Transactions TSP={this.trySendPayment} Address={this.props.ECPair.Address} AddressData={this.props.Data}/>}
             </div>
            
         </div>);
@@ -337,7 +362,6 @@ class Wallet extends Component
 }
 
 export default withRouter(connect(state => {
-    console.log(state);
     return {
         Addrs: state.dashboard.addresses,
         Loading: state.wallet.loading,

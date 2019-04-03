@@ -8,7 +8,6 @@
 }
 
 .wallet-container {
-    margin: auto;
     color: white;
     justify-content: space-evenly;
     display: flex;
@@ -16,16 +15,17 @@
     align-items: center;
     font-size: calc(10px + 0.5vmin);
     flex-shrink: 1;
-    width: 364px;
+    width: calc(100% - 20px);
     padding: 10px;
     background-color: #202225;
     border-radius: 3px;
+    height: fit-content;
 }
 
 
 .wallet-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     flex-direction: row;
     align-items: flex-start;
     width: calc(100% - 20px);
@@ -98,7 +98,7 @@
 
 .wallet-modal {
     width: 382px;
-    height: 20vmin;
+    height: calc((10px + 1vmax) * 9);
     position: absolute;
     
     margin: auto;
@@ -140,7 +140,7 @@
     background-color: #282B30;
     color: lightgray;
     font-size: calc(10px + 0.4vmin);
-    line-height: calc(10px + 0.4vmin);
+    line-height: calc(10px + 1.6vmin);
     height: calc(10px + 1.6vmin);
     width: calc(100% - 5px);
     border: 1px solid #101010;
