@@ -3,6 +3,11 @@ import React, { Component } from 'react';
 
 import moment from 'moment';
 
+/**
+ * Represents one single Transaction element. Its data is obtained by passing it via props as well as some Redux store for the logic to display a confirmation modal and which specific element it should display
+ * TSP - trySendPayment function from wallet.js If this is not passed, then the send again button will not be present
+ * TX - This data is needed. It is not exactly the same TX object from the API endpoint, but rather modified in transactions.js
+ */
 class Transaction extends Component {
     constructor(props)
     {
@@ -10,10 +15,17 @@ class Transaction extends Component {
         this.displayConfirmModal = this.displayConfirmModal.bind(this);
         this.hideConfirmModal = this.hideConfirmModal.bind(this);
     }
+    /**
+     * Display the inline confirmation
+     * @param {string} hash The hash of the transaction of which it's button was clicked. Used to make sure not all of them will suddenly have the inline confirm
+     */
     displayConfirmModal(hash)
     {
         this.props.dispatch({type: "TRANSACTION_SHOW_MODAL", data: hash});
     }
+    /**
+     * Hide the confirmation
+     */
     hideConfirmModal()
     {
         this.props.dispatch({type: "TRANSACTION_HIDE_MODAL"});

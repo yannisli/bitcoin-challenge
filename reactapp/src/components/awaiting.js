@@ -6,6 +6,9 @@ import loading from '../loading.svg';
 
 import './styles/awaiting.css';
 
+/**
+ * A modal dialog to inform the user that we are awaiting a server response, blurs everything else out and displays ontop of everything else
+ */
 class AwaitingModal extends Component {
     render()
     {

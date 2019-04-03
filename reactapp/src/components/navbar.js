@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 
 import './styles/navbar.css';
 
+
+/**
+ * Pretty much used for the display of who the user is logged in as and gives them the option to logout
+ */
 class NavBar extends Component {
     constructor(props)
     {
@@ -11,12 +15,17 @@ class NavBar extends Component {
         this.toggleNav = this.toggleNav.bind(this);
         this.dispatchLogoutRequest = this.dispatchLogoutRequest.bind(this);
     }
-
+    /**
+     * Toggle the dropdown
+     */
     toggleNav()
     {
 
         this.props.dispatch({type: "TOGGLE_NAV_DROP"});
     }
+    /**
+     * Send the logout request to the internal API
+     */
     dispatchLogoutRequest()
     {
         fetch('/api/logout', {

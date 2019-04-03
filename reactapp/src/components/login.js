@@ -13,6 +13,10 @@ import loading from '../loading.svg';
 
 import fetch from 'node-fetch';
 
+/**
+ * Home page of the application. Initially will try to GET the user credentials at first, but if the internal API returns 401 unauthorized then the login/create form will be presented.
+ * If the user is authenticated, it will redirect to /dashboard
+ */
 class Login extends Component {
     constructor(props)
     {
@@ -23,7 +27,9 @@ class Login extends Component {
         this.toggleCreatingAccount = this.toggleCreatingAccount.bind(this);
 
     }
-
+    /**
+     * Toggle between login or creating a new account
+     */
     toggleCreatingAccount()
     {
         document.getElementById("loginuser").value = "";
@@ -31,14 +37,17 @@ class Login extends Component {
         this.props.dispatch({type: "LOGIN_TOGGLE_CREATING"});
         
     }
+    /**
+     * Fetch our account data from internal API
+     */
     fetchAccountData()
     {
+        // If we're already fetching, don't send another request
         if(this.props.fetchingAccount)
             return;
         // GET Request to api/login
         this.props.dispatch({type: "LOGIN_FETCHING_ACCOUNT"});
         // request
-        //setTimeout(() => this.props.dispatch({type: "LOGIN_ACCOUNT_FETCHED"}), 1000);
         fetch('/api/login', {
             method: 'GET'
         })
@@ -69,7 +78,9 @@ class Login extends Component {
             console.log(err);
         });
     }
-
+    /**
+     * Dispatch a POST request to the internal API server to create a new account
+     */
     dispatchAccountCreation()
     {
         // POST request to api/login/create
@@ -124,7 +135,9 @@ class Login extends Component {
             })
         }
     }
-
+    /**
+     * Dispatch a POST request to the internal API indicating that we want to attempt to login with the credentials
+     */
     dispatchLoginRequest()
     {
         // POST request to api/login

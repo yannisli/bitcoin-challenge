@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(logger("dev"));
 
 // Serve built files
-app.use(express.static(path.join(__dirname, 'reactapp/build'), {index: false}));
+app.use(express.static(path.join(__dirname, 'reactapp/build')));
 
 const router = express.Router();
 /**
@@ -279,20 +279,6 @@ router.post("/account/:user_id/wif", (req, res) => {
             }
         }
     });
-});
-/**
- * PUT request. Update the WIF here
- */
-router.put("/account/:user_id/wif/update", (req, res) => {
-    // Read request body
-    
-    // SELECT * FROM WHERE wif=
-})
-/**
- * Delete request for account/delete. Used to delete a user
- */
-router.delete("/account/delete", (req, res) => {
-
 });
 // Default request
 router.get("*", (req, res) => {

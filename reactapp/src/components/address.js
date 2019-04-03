@@ -11,12 +11,18 @@ import NavBar from './navbar';
 import Transactions from './transactions';
 
 import './styles/address.css';
+/**
+ * /address page. Used to fetch public address info, but does not have the ability to send payments
+ */
 class Address extends Component {
     constructor(props)
     {
         super(props);
         this.dispatchFetchRequest = this.dispatchFetchRequest.bind(this);
     }
+    /**
+     * Fetch from textarea
+     */
     dispatchFetchRequest()
     {
         this.props.dispatch({type: "ADDRESS_FETCH_SENT"});

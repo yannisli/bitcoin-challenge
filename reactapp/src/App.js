@@ -18,7 +18,9 @@ class App extends Component {
   render() {
     let toRender = [];
     
-
+    // Depending on the route, render a different component
+    // Home is Login, Login will redirect to dashboard if logged in successfully
+    // All else will redirect to / if credentials invalid
     toRender.push(
     (
       <div key="app" className="App" id="approot">
@@ -33,8 +35,11 @@ class App extends Component {
 
       </div>
     ));
+    // Error modal, so it doesn't get blurred
     toRender.push(<ErrorModal key="error"/>);
+    // Awaiting modal, so it doesn't get blurred
     toRender.push(<AwaitingModal key="awaiting"/>);
+    // We use approot to apply the blur filter. Children will get the filter too, so these modals can't be a child of approot
     return toRender;
   }
   

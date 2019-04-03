@@ -4,12 +4,18 @@ import { connect } from 'react-redux';
 
 import './styles/error.css';
 
+/**
+ * Displays an error modal that will be ontop of everything in the application. Blurs everything else aside from itself
+ */
 class ErrorModal extends Component {
     constructor(props)
     {
         super(props);
         this.closeError = this.closeError.bind(this);
     }
+    /**
+     * Close the modal
+     */
     closeError()
     {
         this.props.dispatch({type: "ERROR_OK"});

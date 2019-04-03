@@ -8,6 +8,9 @@ import './styles/dashboard.css';
 
 import NavBar from './navbar';
 
+/**
+ * Dashboard page. Gets all registered WIF from the internal API server and displays them in a list. Also gives the user option to register another WIF as well as to just look at a public address without the ability to send a payment
+ */
 class Dashboard extends Component {
     constructor(props)
     {
@@ -18,12 +21,21 @@ class Dashboard extends Component {
         this.closeCreation = this.closeCreation.bind(this);
         this.dispatchCreateRequest = this.dispatchCreateRequest.bind(this);
     }
+    /**
+     * Show the creation modal
+     */
     showCreation() {
         this.props.dispatch({type: "DASHBOARD_SHOW_CREATING"});
     }
+    /**
+     * Hide it
+     */
     closeCreation() {
         this.props.dispatch({type: "DASHBOARD_CLOSE_CREATING"});
     }
+    /**
+     * Fetch WIFs from internal API
+     */
     fetchAddresses()
     {
         // GET request using our UserID (UserData.user_id) to get all addresses
@@ -55,6 +67,9 @@ class Dashboard extends Component {
             this.props.dispatch({type: "ERROR_RESPONSE", data: err});
         });
     }
+    /**
+     * Dispatch POST request to internal API indicating we want to register a new WIF, alongside with an optional nickname to keep better track
+     */
     dispatchCreateRequest()
     {
         // TODO: Set state to awaiting server response so that the global 'awaiting' modal will show up
@@ -108,11 +123,13 @@ class Dashboard extends Component {
     }
     render()
     {
+        // If not authenticated, go back to login and get that info/prompt user to login
         if(!this.props.UserData)
             return <Redirect to="/"/>
         let addrs = [];
-
+        
         if(this.props.Addrs) {
+            // If we don't have any addresses then display accordingly
             if(this.props.Addrs.length === 0)
             {
                 addrs.push(
@@ -126,6 +143,7 @@ class Dashboard extends Component {
             }
             else
             {
+                // Otherwise display a list of them
                 addrs.push(<div key="header" className="dashboard-header">Your Registered Addresses</div>);
                 for(let i = 0; i < this.props.Addrs.length; i++)
                 {

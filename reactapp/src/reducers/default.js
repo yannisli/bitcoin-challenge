@@ -22,32 +22,32 @@ const defaultReducer = (state = initialState, action) => {
     // Switch based on action type
     switch (action.type)
     {
-        case "NAVDROP_HIDE":
+        case "NAVDROP_HIDE": // Hide the navdrop, used in componentDidMount()
             newState.displayNavDrop = false;
             return newState;
-        case "SERVER_RESPONSE_RECEIVED":
+        case "SERVER_RESPONSE_RECEIVED": // Received a server response so stop displaying
             newState.awaitingServerResponse = false;
             return newState;
-        case "AWAITING_SERVER_RESPONSE":
+        case "AWAITING_SERVER_RESPONSE": // Awaiting a server response so display
             newState.awaitingServerResponse = true;
             return newState;
-        case "TOGGLE_NAV_DROP":
+        case "TOGGLE_NAV_DROP": // User clicks on the 'logged in as' button, toggle between display or hide
             newState.displayNavDrop = !newState.displayNavDrop;
             return newState;
-        case "BACK_HOME":
+        case "BACK_HOME": // Went back home, reset everything to initial state
             newState = initialState;
             return newState;
         case "ERROR_OK": // When users press OK in the error modal
             newState.displayingError = false;
             newState.errorData = null;
             return newState;
-        case "ADDRESS_RESET":
+        case "ADDRESS_RESET": // Address didMount, reset everything to initial
             newState.fetchingAddress = false;
             newState.fetchedAddress = false;
             newState.publicAddressData = null;
             newState.fetchError = null;
             return newState;
-        case "ADDRESS_ERROR":
+        case "ADDRESS_ERROR": // An error happened, display an inline error
             newState.fetchError = action.data;
             return newState;
         case "ADDRESS_FETCH_SENT": // When users press fetch

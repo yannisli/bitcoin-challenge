@@ -11,7 +11,6 @@ import { BrowserRouter } from 'react-router-dom';
 
 import defaultReducer from './reducers/default';
 import transactionReducer from './reducers/transactions';
-import paymentReducer from './reducers/payments';
 import loginReducer from './reducers/login';
 import dashboardReducer from './reducers/dashboard';
 import walletReducer from './reducers/wallet';
@@ -21,7 +20,6 @@ import walletReducer from './reducers/wallet';
 const combinedReducer = combineReducers({
     'core': defaultReducer,
     'transactions': transactionReducer,
-    'payments': paymentReducer,
     'login': loginReducer,
     'dashboard': dashboardReducer,
     'wallet': walletReducer

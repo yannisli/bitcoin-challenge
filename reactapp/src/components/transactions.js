@@ -6,6 +6,12 @@ import Transaction from './transaction';
 
 import './styles/transaction.css';
 
+/**
+ * Component that displays the entire transaction history of a specific address.
+ * Data is passed via props and has Redux store for logic in minimizing/expanding the list of pending/confirmeds
+ * TSP - Passed down from wallet.js so that it can be passed into each individual Transaction element.
+ * AddressData - The address data that the element is responsible for. Should be the raw TX object returned from the addrs/:address/full endpoint
+ */
 class Transactions extends Component {
 
     constructor(props)
