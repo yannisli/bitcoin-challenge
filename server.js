@@ -19,6 +19,20 @@ app.use(logger("dev"));
 // Serve built files
 app.use(express.static(path.join(__dirname, 'reactapp/build')));
 
+let db = {
+    query: function(query, fn) {
+        pool.getConnection((err, conn) => {
+            if(err)
+                fn(err);
+            else
+                conn.query(query, (err, result) => {
+                    fn(err, result);
+                    conn.release();
+                });
+        });
+    }
+}
+
 const router = express.Router();
 /**
  * GET request for login. Used at the start to see if session is still valid based on cookies and to send them their public/private key & associated user info
